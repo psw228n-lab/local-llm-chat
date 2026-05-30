@@ -12,11 +12,32 @@ Ollama에서 실행 중인 로컬 LLM 모델과 브라우저에서 대화할 수
 - 사용자 직접 모델명 입력 및 저장
 - 시스템 프롬프트 편집 및 저장
 - temperature 설정
+- gpt-oss 추론 수준 설정: 낮음, 중간, 높음
+- Ollama `thinking` 응답 trace 표시 옵션
+- Ollama `format=json` 기반 구조화 출력 모드
+- Ollama tool calling 기반 계산 도구 실험 모드
 - 대화 기록 `localStorage` 저장
 - 새 채팅 시작, 전체 대화 삭제
 - 추천 질문 버튼
 - 로딩 상태와 친절한 오류 메시지
 - 모바일 반응형 다크모드 UI
+
+## gpt-oss 기능 지원
+
+이 앱은 백엔드 없이 브라우저에서 Ollama API를 직접 호출하는 구조입니다. 따라서 로컬 브라우저 앱에서 안전하게 다룰 수 있는 기능을 중심으로 지원합니다.
+
+| 기능 | 앱 지원 상태 | 설명 |
+| --- | --- | --- |
+| Apache 2.0 라이선스 안내 | 지원 | 설정 패널의 gpt-oss 참고 메모에 표시합니다. |
+| 추론 노력 수준 | 지원 | 설정 패널에서 낮음, 중간, 높음을 선택하면 `/api/chat`의 `think` 값으로 전달합니다. |
+| 추론 trace | 지원 | 설정에서 `추론 trace 표시`를 켜면 assistant 메시지 아래에 접을 수 있는 디버그 패널로 표시합니다. |
+| 구조화 출력 | 지원 | JSON 출력 모드를 켜면 Ollama의 `format: "json"` 옵션을 사용합니다. |
+| 도구 호출 | 부분 지원 | 백엔드 없이 안전하게 실행 가능한 계산 도구 예제를 제공합니다. |
+| 웹 브라우징, Python 실행 | 제외 | 공개 정적 사이트에서 임의 브라우징/Python 실행은 보안상 백엔드 샌드박스가 필요합니다. |
+| 정밀 조정 | 문서화 | 앱에서 직접 학습하지는 않으며, 별도 CLI/학습 환경에서 진행해야 합니다. |
+| MXFP4 양자화 | 안내 | 모델 특성과 하드웨어 참고 정보로 표시합니다. |
+
+추론 trace는 디버깅과 검증 목적에 가깝습니다. 최종 사용자에게 공개하는 서비스에서는 기본값처럼 꺼두는 것을 권장합니다.
 
 ## 기술 스택
 
@@ -109,9 +130,14 @@ npm run preview
 
 ### GitHub Pages
 
-1. `npm run build`를 실행합니다.
-2. GitHub 저장소의 Pages 설정에서 배포 소스를 GitHub Actions 또는 `dist/` 업로드 방식으로 설정합니다.
-3. Vite 설정의 `base: './'` 덕분에 프로젝트 페이지 경로에서도 정적 파일이 동작합니다.
+이 저장소에는 `.github/workflows/deploy.yml`이 포함되어 있습니다.
+
+1. GitHub 저장소의 `Settings > Pages`로 이동합니다.
+2. `Build and deployment > Source`를 `GitHub Actions`로 설정합니다.
+3. `main` 브랜치에 push하면 GitHub Actions가 `npm ci`, `npm run build`를 실행합니다.
+4. 빌드 결과인 `dist/`가 GitHub Pages에 배포됩니다.
+
+Vite 설정의 `base: './'` 덕분에 `https://사용자명.github.io/local-llm-chat/` 같은 프로젝트 페이지 경로에서도 정적 파일이 동작합니다.
 
 ### Netlify
 
@@ -137,6 +163,13 @@ $env:OLLAMA_ORIGINS="http://localhost:5173,https://your-username.github.io,https
 ollama serve
 ```
 
+이 저장소를 그대로 배포했다면 다음처럼 실행할 수 있습니다.
+
+```powershell
+$env:OLLAMA_ORIGINS="https://psw228n-lab.github.io,https://psw228n-lab.github.io/local-llm-chat,http://localhost:5173,http://127.0.0.1:5173"
+ollama serve
+```
+
 ### macOS 또는 Linux
 
 ```bash
@@ -150,6 +183,8 @@ Windows에서 Ollama가 백그라운드 서비스로 실행 중이라면 환경 
 - Ollama 서버에 연결할 수 없습니다: `ollama serve`가 실행 중인지 확인하세요.
 - 모델이 설치되어 있지 않을 수 있습니다: `ollama pull 모델명`을 먼저 실행하세요.
 - 답변이 너무 느립니다: 더 작은 모델을 선택하거나 temperature를 낮추고 대화 기록을 새로 시작해보세요.
+- JSON 출력이 깨집니다: JSON 출력 모드를 켜고 새 채팅으로 다시 시작하세요.
+- 계산 도구가 동작하지 않습니다: 설정에서 에이전트 도구를 `계산 도구`로 바꾸고, 모델이 tool calling을 지원하는지 확인하세요.
 
 ## 폴더 구조
 

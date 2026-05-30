@@ -17,6 +17,10 @@ const DEFAULT_SETTINGS: ChatSettings = {
   customModels: [],
   systemPrompt: DEFAULT_SYSTEM_PROMPT,
   temperature: 0.7,
+  reasoningEffort: 'medium',
+  showThinking: false,
+  responseFormat: 'text',
+  agentMode: 'off',
 };
 
 const normalizeSettings = (settings: ChatSettings): ChatSettings => ({
@@ -27,6 +31,10 @@ const normalizeSettings = (settings: ChatSettings): ChatSettings => ({
     typeof settings.temperature === 'number'
       ? settings.temperature
       : DEFAULT_SETTINGS.temperature,
+  reasoningEffort: settings.reasoningEffort ?? DEFAULT_SETTINGS.reasoningEffort,
+  showThinking: settings.showThinking ?? DEFAULT_SETTINGS.showThinking,
+  responseFormat: settings.responseFormat ?? DEFAULT_SETTINGS.responseFormat,
+  agentMode: settings.agentMode ?? DEFAULT_SETTINGS.agentMode,
 });
 
 function App() {

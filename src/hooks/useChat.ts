@@ -51,17 +51,23 @@ export const useChat = (settings: ChatSettings) => {
       setError(null);
 
       try {
-        const assistantContent = await sendChatMessage({
+        const assistantReply = await sendChatMessage({
           model: settings.model,
           messages: nextMessages,
           systemPrompt: settings.systemPrompt,
           temperature: settings.temperature,
+          reasoningEffort: settings.reasoningEffort,
+          showThinking: settings.showThinking,
+          responseFormat: settings.responseFormat,
+          agentMode: settings.agentMode,
         });
 
         const assistantMessage: ChatMessage = {
           id: createMessageId(),
           role: 'assistant',
-          content: assistantContent,
+          content: assistantReply.content,
+          thinking: assistantReply.thinking,
+          toolCalls: assistantReply.toolCalls,
           createdAt: new Date().toISOString(),
         };
 

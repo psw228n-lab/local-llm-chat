@@ -3,8 +3,8 @@ import { Sparkles } from 'lucide-react';
 const RECOMMENDED_PROMPTS = [
   '마케팅 퍼널을 쉽게 설명해줘',
   'Ollama가 뭔지 비유로 설명해줘',
-  '내 노트북에서 gpt-oss-20b가 느린 이유를 설명해줘',
-  '오늘 공부한 내용을 TIL 블로그 글로 정리해줘',
+  '11434 더하기 12341에 412를 곱해줘',
+  '오늘 공부한 내용을 TIL JSON으로 정리해줘',
 ];
 
 interface EmptyStateProps {
